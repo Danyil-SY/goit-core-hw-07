@@ -16,14 +16,14 @@ class Field:
     @property
     def value(self) -> str:
         """Get the value of the field."""
-        return self._value
+        return self.__value
 
     @value.setter
     def value(self, value: str):
         """Set the value of the field, performing validation."""
         if not self.is_valid(value):
             raise ValueError("Invalid value")
-        self._value = value
+        self.__value = value
 
     def is_valid(self, value: str) -> bool:
         """Check if the given value is valid."""
@@ -92,8 +92,11 @@ class Record:
 
     def edit_phone(self, old_phone: str, new_phone: str) -> None:
         """Edit a phone number in the record."""
-        self.remove_phone(old_phone)
-        self.add_phone(new_phone)     
+        if self.find_phone(old_phone):
+            self.remove_phone(old_phone)
+            self.add_phone(new_phone)
+        else:
+            raise ValueError("The phone number doesn't exist.")     
 
     def find_phone(self, phone: str) -> Phone:
         """Find a phone number in the record."""
